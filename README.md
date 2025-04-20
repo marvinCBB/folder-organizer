@@ -1,85 +1,88 @@
-# Folder Organizer with Restore Capability
+# 🗂️ Folder Organizer with Restore and Date Features
 
-This is a simple and practical Python script that automatically organizes files in a given folder by file type. It also includes a **restore feature** to undo the last organization operation, and supports command-line flags for flexibility.
+A smart and flexible Python script to organize messy folders by file type or date.  
+Includes collision-safe file moves, undo functionality, and auto-cleanup of empty folders on restore.
 
 ---
 
 ## 🚀 Features
 
-- 📂 Automatically sorts files into categorized subfolders (Images, Documents, Videos, etc.)
-- 🔄 Restore functionality: moves files back to their original locations
-- 🧠 Collision-safe: renames duplicates to prevent overwriting (e.g., file (1).pdf)
-- 🖥️ Command-line flag `--restore` to reverse the last organization
-- ✅ Uses `pathlib` and `shutil` for clean and modern file operations
+- ✅ Organize files by **category** (Documents, Images, Audio, etc.)
+- 📅 Organize files into **year/month folder trees**
+- 🏷️ Prepend last modified date to filenames (e.g., `2024-04-18-report.pdf`)
+- 🔁 **Restore** last move operation (undo)
+- 🧹 Cleans up **empty folders** after restore
+- 🧠 Collision-safe: renames files automatically if destination already exists
 
 ---
 
 ## 🛠 Requirements
 
-- Python 3.x (tested with 3.9+)
+- Python 3.6+
+
+Install required modules (standard library only — no `pip` needed)
 
 ---
 
-## 📦 How to Use
+## 🧪 Example Usage
 
-1. Clone the repository:
-```bash
-git clone https://github.com/YOUR_USERNAME/folder-organizer.git
-cd folder-organizer
-```
-
-2. Set your target folder path inside the script (default: `./test_folder`)
-
-3. Run to organize files:
+**1. Organize by file type (default):**
 ```bash
 python folder_organizer.py
 ```
 
-4. Run to restore files:
+**2. Organize by last modified date (folder tree):**
+```bash
+python folder_organizer.py --by-date
+```
+
+**3. Prepend date to filenames only:**
+```bash
+python folder_organizer.py --prepend-date
+```
+
+**4. Combine both date folder + date prefix:**
+```bash
+python folder_organizer.py --by-date --prepend-date
+```
+
+**5. Restore previous organization:**
 ```bash
 python folder_organizer.py --restore
 ```
 
 ---
 
-## 📁 Example Folder Structure
+## 📁 Example Output
 
+```
 Before:
-```
 test_folder/
-├── file1.pdf
-├── photo.jpg
-├── script.py
-```
+├── img.jpg
+├── document.pdf
+├── song.mp3
 
-After:
-```
+After (--by-date --prepend-date):
 test_folder/
-├── Documents/
-│   └── file1.pdf
-├── Images/
-│   └── photo.jpg
-├── Code/
-│   └── script.py
+└── 2024/
+    └── April/
+        ├── 2024-04-18-img.jpg
+        ├── 2024-04-18-document.pdf
+        └── 2024-04-18-song.mp3
 ```
-
----
-
-## 🧪 Upcoming Improvements
-
-- Organize by file date (Year/Month)
-- Organize by file size (Small, Medium, Large)
-- Dry-run preview mode
-- Config file support for user-defined rules
 
 ---
 
 ## 👨‍💻 Author
 
-**Marvin C. Bustillos Barcaya**  
-Freelance automation & coding enthusiast  
+**marvinCBB**  
+Freelance automation & scripting developer  
 GitHub: [https://github.com/marvinCBB](https://github.com/marvinCBB)
 
 ---
 
-Feel free to fork or contribute if you find it useful!
+## 📌 Coming Soon
+
+- `--dry-run` mode to preview changes before moving files  
+- Config file support for custom rules  
+- GUI version for non-tech users  
