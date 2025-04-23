@@ -86,3 +86,16 @@ GitHub: [https://github.com/marvinCBB](https://github.com/marvinCBB)
 - `--dry-run` mode to preview changes before moving files  
 - Config file support for custom rules  
 - GUI version for non-tech users  
+
+---
+
+## 🆕 v3.1 Improvements
+
+- ✅ Added support for **recursive organization** (default behavior)
+- ✅ Now skips the internal `restore.txt` file during reorganization
+- ✅ Improved folder cleanup logic:
+  - On **organize**: deletes empty folders from file’s original location up to base folder
+  - On **restore**: prevents climbing above the base folder (`target_folder`), avoiding infinite loops or accidental deletion
+- ✅ Safer and more symmetric handling between organize and restore modes
+
+These changes make the script safer and more robust in deeply nested folder structures.

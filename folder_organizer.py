@@ -8,13 +8,15 @@ parser = argparse.ArgumentParser(description="Organize a folder by category or d
 parser.add_argument('--restore', action='store_true', help='Restore the last operation')
 parser.add_argument('--by-date', action='store_true', help='Organize files by last modified year/month')
 parser.add_argument('--prepend-date', action='store_true', help='Add date prefix to filename (YYYY-MM-DD-)')
+parser.add_argument('--recursive', action='store_true', help='Organize files recursively in all folders and subfolders')
+
 args = parser.parse_args()
 
 restore = args.restore
 organize_by_date = args.by_date
 prepend_date = args.prepend_date
 organize_by_category = not args.by_date and not args.restore
-
+recursive=args.recursive
 # Setup
 target_folder = Path('./test_folder')
 restore_file = target_folder / 'restore.txt'
@@ -31,13 +33,14 @@ if restore:
                 if source_path.exists():
                     print(f"Skipped: {source} already exists.")
                 else:
+                    source_path.parent.mkdir(exist_ok=True)
                     shutil.move(destination_path, source_path)
                     print(f"Restored: {destination_path.name}")
                     remove_folder=destination_path.parent
-                    while source_path.parent != remove_folder:
-                        print(f'folder to delete:{remove_folder}')
-                        if not any(remove_folder.iterdir()):                     
-                            remove_folder.rmdir()
+                    while target_folder != remove_folder:                        
+                        if not any(remove_folder.iterdir()):  
+                            print(f'folder to delete:{remove_folder}')                   
+                            remove_folder.rmdir()                            
                         else: 
                             break
                         remove_folder=remove_folder.parent
@@ -49,7 +52,10 @@ if restore:
         print('No restore file was found.')
 
 else:
-    files = [f for f in target_folder.iterdir() if f.is_file()]
+    if recursive:
+        files=[i for i in target_folder.glob('**/*')if i.is_file() and i != restore_file]
+    else:
+        files = [f for f in target_folder.iterdir() if f.is_file()]
     print(f"Found {len(files)} files to organize:\n")
 
     move_log = []
@@ -105,6 +111,14 @@ else:
         shutil.move(file, destination)
         move_log.append(f"{file}||{destination}")
         print(f"Moved: {file.name} → {destination}")
+        remove_folder=file.parent
+        while target_folder != remove_folder:                        
+            if not any(remove_folder.iterdir()):  
+                print(f'folder to delete:{remove_folder}')                   
+                remove_folder.rmdir()                            
+            else: 
+                break
+            remove_folder=remove_folder.parent
 
     restore_file.write_text('\n'.join(move_log), encoding='utf-8')
     print("\nAll files organized. Restore log saved.")
